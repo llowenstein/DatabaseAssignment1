@@ -17,7 +17,7 @@ CREATE TABLE Room
 ,type        VARCHAR(15)    NOT NULL
 ,price       DECIMAL(10)    NOT NULL
 ,CONSTRAINT chk_Type
-            CHECK (type = 'Single' OR type = 'Double' OR type = 'Family')
+            CHECK (type IN ('Single', 'Double', 'Family'))
 ,CONSTRAINT chk_Price
             CHECK (price >= 10 AND price <= 100)
 ,CONSTRAINT chk_RoomNo
@@ -83,6 +83,38 @@ INSERT INTO Booking
 INSERT INTO Booking
   VALUES ('H0004', 'G001', '2016-08-08', '2016-09-10', '100');
 --
-ALTER TABLE Hotel
-ADD CONSTRAINT chk_Type CHECK (type = 'Deluxe' OR type = 'Single' OR type = 'Double' OR type = 'Family')
-;
+ALTER TABLE Room
+DROP CONSTRAINT chk_type;
+--
+ALTER TABLE Room
+ADD CONSTRAINT chk_Type
+  CHECK (type IN ('Deluxe', 'Single', 'Double', 'Family'));
+--
+--
+ALTER TABLE Room
+  ADD discount  DECIMAL(5)  DEFAULT 0 NOT NULL;
+ALTER TABLE Room
+  ADD CONSTRAINT chk_Discount CHECK (discount >= 0 AND discount <= 30);
+--
+UPDATE Room
+SET price = 23
+WHERE hotelNo = 'H0002' AND type = 'Double';
+--
+UPDATE Booking
+SET dateFrom = '2016-07-28', dateTo = '2016-10-05'
+WHERE guestNo = 'G001
+--
+CREATE TABLE OldBooking
+(hotelNo    CHAR(10)    NOT NULL
+,guestNo    CHAR(10)    NOT NULL
+,dateFrom   VARCHAR(10) NOT NULL
+,dateTo     VARCHAR(10) NOT NULL
+,roomNo     CHAR(10)    NOT NULL
+);
+--
+INSERT INTO OldBooking
+SELECT * FROM Booking
+WHERE dateTo <= '2017-01-01';
+--
+DELETE FROM Booking
+WHERE dateTo <= '2017-01-01';
