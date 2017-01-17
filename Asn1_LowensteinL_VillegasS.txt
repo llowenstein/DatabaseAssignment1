@@ -16,6 +16,12 @@ CREATE TABLE Room
 ,hotelNo     CHAR(10)       NOT NULL
 ,type        VARCHAR(15)    NOT NULL
 ,price       DECIMAL(10)    NOT NULL
+,CONSTRAINT chk_Type
+            CHECK (type = 'Single' OR type = 'Double' OR type = 'Family')
+,CONSTRAINT chk_Price
+            CHECK (price >= 10 AND price <= 100)
+,CONSTRAINT chk_RoomNo
+            CHECK (roomNo >= 1 AND roomNo <= 100)
 ,CONSTRAINT PKRoom PRIMARY KEY (roomNo, hotelNo)
 ,CONSTRAINT FKHotelNo FOREIGN KEY (hotelNo)
                       REFERENCES Hotel (hotelNo)
@@ -53,11 +59,11 @@ INSERT INTO Hotel
 INSERT INTO Room
   VALUES ('001', 'H0001', 'Single', 50);
 INSERT INTO Room
-  VALUES ('321', 'H0003', 'Double', 75);
+  VALUES ('056', 'H0003', 'Double', 75);
 INSERT INTO Room
-  VALUES ('666', 'H0004', 'Family', 66);
+  VALUES ('100', 'H0004', 'Family', 66);
 INSERT INTO Room
-  VALUES ('856', 'H0002', 'Double', 20);
+  VALUES ('075', 'H0002', 'Double', 20);
 --
 INSERT INTO Guest
   VALUES ('G001', 'Wilson Hu', '123 Hampton Pl');
@@ -68,3 +74,11 @@ INSERT INTO Guest
 INSERT INTO Guest
   VALUES ('G004', 'Yashar Nesvaderani', '666 Fail St');
 --
+INSERT INTO Booking
+  VALUES ('H0003', 'G002', '2016-08-08', '2016-09-08', '056');
+INSERT INTO Booking
+  VALUES ('H0001', 'G004', '2016-10-05', '2016-10-20', '001');
+INSERT INTO Booking
+  VALUES ('H0002', 'G003', '2017-01-03', '2017-01-06', '075');
+INSERT INTO Booking
+  VALUES ('H0004', 'G001', '2016-08-08', '2016-09-08', '056');
