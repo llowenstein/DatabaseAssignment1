@@ -1,0 +1,42 @@
+DROP TABLE Guest;
+DROP TABLE Booking;
+DROP TABLE Room;
+DROP TABLE Hotel;
+DROP TABLE OldBooking;
+--
+CREATE TABLE Hotel
+(hotelNo      CHAR(10)    NOT NULL
+,hotelName    VARCHAR(30) NOT NULL
+,city         VARCHAR(15) NOT NULL
+,CONSTRAINT PKHotel PRIMARY KEY (hotelNo)
+);
+--
+CREATE TABLE Room
+(roomNo      CHAR(10)    NOT NULL
+,hotelNo     CHAR(10)    NOT NULL
+,type        VARCHAR(15) NOT NULL
+,price       CHAR(10)    NOT NULL
+,CONSTRAINT PKRoom PRIMARY KEY (roomNo, hotelNo)
+,CONSTRAINT FKHotelNo FOREIGN KEY (hotelNo)
+                      REFERENCES Hotel (hotelNo)
+);
+--
+CREATE TABLE Booking
+(hotelNo    CHAR(10)    NOT NULL
+,guestNo    CHAR(10)    NOT NULL
+,dateFrom   VARCHAR(10) NOT NULL
+,dateTo     VARCHAR(10) NOT NULL
+,roomNo     CHAR(10)    NOT NULL
+,CONSTRAINT PKBooking PRIMARY KEY (hotelNo, guestNo, dateFrom)
+,CONSTRAINT FKHotelNo FOREIGN KEY (hotelNo)
+                      REFERENCES Room (hotelNo)
+);
+--
+CREATE TABLE Guest
+(guestNo      CHAR(10)    NOT NULL
+,guestName    VARCHAR(30) NOT NULL
+,guestAddress VARCHAR(50) NOT NULL
+,CONSTRAINT PKGuest PRIMARY KEY (guestNo)
+,CONSTRAINT FKGuestNo FOREIGN KEY (guestNo)
+                      REFERENCES Booking (guestNo)
+);
