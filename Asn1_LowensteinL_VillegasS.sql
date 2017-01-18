@@ -113,7 +113,7 @@ ALTER TABLE Room
   CHECK (discount BETWEEN 0 AND 30);
 --  Q6a. Increasing the price of 'Double' rooms in a hotel of our choice by 15%.
 UPDATE Room
-SET price = price * 1.15;
+SET price = price * 1.15
 WHERE hotelNo = 'H0002'
   AND type = 'Double';
 --  Q6b. Modifying the booking for a guest that arrived early.

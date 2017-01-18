@@ -38,7 +38,7 @@ SQL> --  Q2. Creating Hotel table.
 SQL> CREATE TABLE Hotel
   2  (hotelNo	   CHAR(10)    NOT NULL
   3  ,hotelName    VARCHAR(30) NOT NULL
-  4  ,city	   VARCHAR(15) NOT NULL
+  4  ,city	   	   VARCHAR(15) NOT NULL
   5  ,CONSTRAINT PKHotel PRIMARY KEY (hotelNo)
   6  );
 
@@ -46,19 +46,19 @@ Table created.
 
 SQL> --  Q2. Creating Room table.
 SQL> CREATE TABLE Room
-  2  (roomNo	  CHAR(10)	 NOT NULL
-  3  ,hotelNo	  CHAR(10)	 NOT NULL
-  4  ,type	  VARCHAR(15)	 NOT NULL
-  5  ,price	  DECIMAL(10)	 NOT NULL
+  2  (roomNo	  CHAR(10)	 	 NOT NULL
+  3  ,hotelNo	  CHAR(10)	 	 NOT NULL
+  4  ,type	  	  VARCHAR(15)	 NOT NULL
+  5  ,price	  	  DECIMAL(10)	 NOT NULL
   6  ,CONSTRAINT chk_Type
-  7  		 CHECK (type IN ('Single', 'Double', 'Family'))
+  7  		 	 CHECK (type IN ('Single', 'Double', 'Family'))
   8  ,CONSTRAINT chk_Price
-  9  		 CHECK (price BETWEEN 10 AND 100)
+  9  		 	 CHECK (price BETWEEN 10 AND 100)
  10  ,CONSTRAINT chk_RoomNo
- 11  		 CHECK (roomNo BETWEEN 1 AND 100)
+ 11  		 	 CHECK (roomNo BETWEEN 1 AND 100)
  12  ,CONSTRAINT PKRoom PRIMARY KEY (roomNo, hotelNo)
  13  ,CONSTRAINT FKHotelNo FOREIGN KEY (hotelNo)
- 14  			   REFERENCES Hotel (hotelNo)
+ 14  			 REFERENCES Hotel (hotelNo)
  15  );
 
 Table created.
@@ -82,9 +82,9 @@ SQL> CREATE TABLE Booking
   6  ,roomNo	 CHAR(10)    NOT NULL
   7  ,CONSTRAINT PKBooking PRIMARY KEY (hotelNo, guestNo, dateFrom)
   8  ,CONSTRAINT FKBHotelNo FOREIGN KEY (hotelNo, roomNo)
-  9  			   REFERENCES Room (hotelNo, roomNo)
+  9  			 REFERENCES Room (hotelNo, roomNo)
  10  ,CONSTRAINT FKGuestNo FOREIGN KEY (guestNo)
- 11  			   REFERENCES Guest (guestNo)
+ 11  			 REFERENCES Guest (guestNo)
  12  );
 
 Table created.
@@ -200,14 +200,12 @@ Table altered.
 
 SQL> --  Q6a. Increasing the price of 'Double' rooms in a hotel of our choice by 15%.
 SQL> UPDATE Room
-  2  SET price = price * 1.15;
+  2  SET price = price * 1.15
+  3  WHERE hotelNo = 'H0002'
+  4    AND type = 'Double';
 
-4 rows updated.
+1 row updated.
 
-SQL> WHERE hotelNo = 'H0002'
-SP2-0734: unknown command beginning "WHERE hote..." - rest of line ignored.
-SQL>   AND type = 'Double';
-SP2-0734: unknown command beginning "AND type =..." - rest of line ignored.
 SQL> --  Q6b. Modifying the booking for a guest that arrived early.
 SQL> UPDATE Booking
   2  SET dateFrom = TO_DATE('2016-07-28'), dateTo = TO_DATE('2016-10-05')
