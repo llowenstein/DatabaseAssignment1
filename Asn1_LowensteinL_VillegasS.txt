@@ -1,0 +1,244 @@
+SQL> --
+SQL> -- ---------------------------------------------------------
+SQL> --  COMP 2714
+SQL> --  SET 2D
+SQL> --  Assignment Asn01
+SQL> --  Villegas, Sergio    A00935797
+SQL> --  Lowenstein, Luli    A00946133
+SQL> --  email: jvillegas4@my.bcit.ca
+SQL> --  email: llowenstein@my.bcit.ca
+SQL> -- ---------------------------------------------------------
+SQL> ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD';
+
+Session altered.
+
+SQL> --
+SQL> --  Q1. Dropping all tables
+SQL> DROP TABLE Booking;
+
+Table dropped.
+
+SQL> DROP TABLE Guest;
+
+Table dropped.
+
+SQL> DROP TABLE Room;
+
+Table dropped.
+
+SQL> DROP TABLE Hotel;
+
+Table dropped.
+
+SQL> DROP TABLE OldBooking;
+
+Table dropped.
+
+SQL> --  Q2. Creating Hotel table.
+SQL> CREATE TABLE Hotel
+  2  (hotelNo	   CHAR(10)    NOT NULL
+  3  ,hotelName    VARCHAR(30) NOT NULL
+  4  ,city	   VARCHAR(15) NOT NULL
+  5  ,CONSTRAINT PKHotel PRIMARY KEY (hotelNo)
+  6  );
+
+Table created.
+
+SQL> --  Q2. Creating Room table.
+SQL> CREATE TABLE Room
+  2  (roomNo	  CHAR(10)	 NOT NULL
+  3  ,hotelNo	  CHAR(10)	 NOT NULL
+  4  ,type	  VARCHAR(15)	 NOT NULL
+  5  ,price	  DECIMAL(10)	 NOT NULL
+  6  ,CONSTRAINT chk_Type
+  7  		 CHECK (type IN ('Single', 'Double', 'Family'))
+  8  ,CONSTRAINT chk_Price
+  9  		 CHECK (price BETWEEN 10 AND 100)
+ 10  ,CONSTRAINT chk_RoomNo
+ 11  		 CHECK (roomNo BETWEEN 1 AND 100)
+ 12  ,CONSTRAINT PKRoom PRIMARY KEY (roomNo, hotelNo)
+ 13  ,CONSTRAINT FKHotelNo FOREIGN KEY (hotelNo)
+ 14  			   REFERENCES Hotel (hotelNo)
+ 15  );
+
+Table created.
+
+SQL> --  Q3. Creating Guest table.
+SQL> CREATE TABLE Guest
+  2  (guestNo	   CHAR(10)    NOT NULL
+  3  ,guestName    VARCHAR(30) NOT NULL
+  4  ,guestAddress VARCHAR(30) NOT NULL
+  5  ,CONSTRAINT PKGuest PRIMARY KEY (guestNo)
+  6  );
+
+Table created.
+
+SQL> --  Q3. Creating Booking table.
+SQL> CREATE TABLE Booking
+  2  (hotelNo	 CHAR(10)    NOT NULL
+  3  ,guestNo	 CHAR(10)    NOT NULL
+  4  ,dateFrom	 DATE	     NOT NULL
+  5  ,dateTo	 VARCHAR(10) NOT NULL
+  6  ,roomNo	 CHAR(10)    NOT NULL
+  7  ,CONSTRAINT PKBooking PRIMARY KEY (hotelNo, guestNo, dateFrom)
+  8  ,CONSTRAINT FKBHotelNo FOREIGN KEY (hotelNo, roomNo)
+  9  			   REFERENCES Room (hotelNo, roomNo)
+ 10  ,CONSTRAINT FKGuestNo FOREIGN KEY (guestNo)
+ 11  			   REFERENCES Guest (guestNo)
+ 12  );
+
+Table created.
+
+SQL> --  Q4. Inserting sample data into the Hotel table.
+SQL> INSERT INTO Hotel
+  2    VALUES ('H0001', 'The Villegas Inn', 'Bermuda');
+
+1 row created.
+
+SQL> INSERT INTO Hotel
+  2    VALUES ('H0002', 'The Lowenstein Inn', 'Caracas');
+
+1 row created.
+
+SQL> INSERT INTO Hotel
+  2    VALUES ('H0003', 'The Lam Motel', 'Bangkok');
+
+1 row created.
+
+SQL> INSERT INTO Hotel
+  2    VALUES ('H0004', 'The NesvaderaHu Joint Hotel', 'Surrey');
+
+1 row created.
+
+SQL> --  Q4. Inserting sample data into the Room table.
+SQL> INSERT INTO Room
+  2    VALUES ('001', 'H0001', 'Single', 50);
+
+1 row created.
+
+SQL> INSERT INTO Room
+  2    VALUES ('056', 'H0003', 'Double', 75);
+
+1 row created.
+
+SQL> INSERT INTO Room
+  2    VALUES ('100', 'H0004', 'Family', 66);
+
+1 row created.
+
+SQL> INSERT INTO Room
+  2    VALUES ('075', 'H0002', 'Double', 20);
+
+1 row created.
+
+SQL> --  Q4. Inserting sample data into the Guest table.
+SQL> INSERT INTO Guest
+  2    VALUES ('G001', 'Wilson Hu', '123 Hampton Pl');
+
+1 row created.
+
+SQL> INSERT INTO Guest
+  2    VALUES ('G002', 'Angus Lam', '9.75 Platform');
+
+1 row created.
+
+SQL> INSERT INTO Guest
+  2    VALUES ('G003', 'Luli Lowenstein', '654 Columbia Road');
+
+1 row created.
+
+SQL> INSERT INTO Guest
+  2    VALUES ('G004', 'Yashar Nesvaderani', '666 Fail St');
+
+1 row created.
+
+SQL> --  Q4. Inserting sample data into the Booking table.
+SQL> INSERT INTO Booking
+  2    VALUES ('H0003', 'G002', TO_DATE('2016-08-08'), TO_DATE('2016-09-08'), '056');
+
+1 row created.
+
+SQL> INSERT INTO Booking
+  2    VALUES ('H0001', 'G004', TO_DATE('2016-10-05'), TO_DATE('2016-10-20'), '001');
+
+1 row created.
+
+SQL> INSERT INTO Booking
+  2    VALUES ('H0002', 'G003', TO_DATE('2017-01-03'), TO_DATE('2017-01-06'), '075');
+
+1 row created.
+
+SQL> INSERT INTO Booking
+  2    VALUES ('H0004', 'G001', TO_DATE('2016-08-08'), TO_DATE('2016-09-10'), '100');
+
+1 row created.
+
+SQL> --  Q5a. Dropping the check constraint for Room table.
+SQL> ALTER TABLE Room
+  2  DROP CONSTRAINT chk_type;
+
+Table altered.
+
+SQL> --  Q5a. Modifying the check constraint for Room so it accepts 'Deluxe'.
+SQL> ALTER TABLE Room
+  2  ADD CONSTRAINT chk_Type
+  3    CHECK (type IN ('Deluxe', 'Single', 'Double', 'Family'));
+
+Table altered.
+
+SQL> --  Q5b. Adding a new column called Discount. Default 0, and must be between 0 and 30.
+SQL> ALTER TABLE Room
+  2    ADD discount  DECIMAL(5)  DEFAULT 0 NOT NULL;
+
+Table altered.
+
+SQL> ALTER TABLE Room
+  2    ADD CONSTRAINT chk_Discount
+  3    CHECK (discount BETWEEN 0 AND 30);
+
+Table altered.
+
+SQL> --  Q6a. Increasing the price of 'Double' rooms in a hotel of our choice by 15%.
+SQL> UPDATE Room
+  2  SET price = price * 1.15;
+
+4 rows updated.
+
+SQL> WHERE hotelNo = 'H0002'
+SP2-0734: unknown command beginning "WHERE hote..." - rest of line ignored.
+SQL>   AND type = 'Double';
+SP2-0734: unknown command beginning "AND type =..." - rest of line ignored.
+SQL> --  Q6b. Modifying the booking for a guest that arrived early.
+SQL> UPDATE Booking
+  2  SET dateFrom = TO_DATE('2016-07-28'), dateTo = TO_DATE('2016-10-05')
+  3  WHERE guestNo = 'G001';
+
+1 row updated.
+
+SQL> --  Q7a. Creating archive table for Booking table.
+SQL> CREATE TABLE OldBooking
+  2  (hotelNo	 CHAR(10)    NOT NULL
+  3  ,guestNo	 CHAR(10)    NOT NULL
+  4  ,dateFrom	 VARCHAR(10) NOT NULL
+  5  ,dateTo	 VARCHAR(10) NOT NULL
+  6  ,roomNo	 CHAR(10)    NOT NULL
+  7  ,CONSTRAINT PKOldBooking PRIMARY KEY (hotelNo, guestNo, dateFrom, roomNo)
+  8  );
+
+Table created.
+
+SQL> --  Q7b. Copying rows in Booking table with dates before 2017-01-01 to OldBooking table.
+SQL> INSERT INTO OldBooking
+  2  SELECT * FROM Booking
+  3  WHERE dateTo < TO_DATE('2017-01-01');
+
+3 rows created.
+
+SQL> --  Q7c. Deleting rows in Booking table that have dates before 2017-01-01.
+SQL> DELETE FROM Booking
+  2  WHERE dateTo <= TO_DATE('2017-01-01');
+
+3 rows deleted.
+
+SQL> --
+SQL> SPOOL OFF;
