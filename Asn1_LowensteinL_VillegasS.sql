@@ -1,16 +1,32 @@
+SET ECHO ON
+--
+-- ---------------------------------------------------------
+--  COMP 2714
+--  SET 2D
+--  Assignment Asn01
+--  Villegas, Sergio    A00
+--  Lowenstein, Luli    A00946133
+--  email: @bcit.ca
+--  email: llowenstein@bcit.ca
+-- ---------------------------------------------------------
+ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD';
+--
+SPOOL PATH-HERE/spool.txt
+--
+--  Q1. Dropping all tables
 DROP TABLE Booking;
 DROP TABLE Guest;
 DROP TABLE Room;
 DROP TABLE Hotel;
 DROP TABLE OldBooking;
---
+--  Q2. Creating Hotel table.
 CREATE TABLE Hotel
 (hotelNo      CHAR(10)    NOT NULL
 ,hotelName    VARCHAR(30) NOT NULL
 ,city         VARCHAR(15) NOT NULL
 ,CONSTRAINT PKHotel PRIMARY KEY (hotelNo)
 );
---
+--  Q2. Creating Room table.
 CREATE TABLE Room
 (roomNo      CHAR(10)       NOT NULL
 ,hotelNo     CHAR(10)       NOT NULL
@@ -19,25 +35,25 @@ CREATE TABLE Room
 ,CONSTRAINT chk_Type
             CHECK (type IN ('Single', 'Double', 'Family'))
 ,CONSTRAINT chk_Price
-            CHECK (price >= 10 AND price <= 100)
+            CHECK (price BETWEEN 10 AND 100)
 ,CONSTRAINT chk_RoomNo
-            CHECK (roomNo >= 1 AND roomNo <= 100)
+            CHECK (roomNo BETWEEN 1 AND 100)
 ,CONSTRAINT PKRoom PRIMARY KEY (roomNo, hotelNo)
 ,CONSTRAINT FKHotelNo FOREIGN KEY (hotelNo)
                       REFERENCES Hotel (hotelNo)
 );
---
+--  Q3. Creating Guest table.
 CREATE TABLE Guest
 (guestNo      CHAR(10)    NOT NULL
 ,guestName    VARCHAR(30) NOT NULL
 ,guestAddress VARCHAR(30) NOT NULL
 ,CONSTRAINT PKGuest PRIMARY KEY (guestNo)
 );
---
+--  Q3. Creating Booking table.
 CREATE TABLE Booking
 (hotelNo    CHAR(10)    NOT NULL
 ,guestNo    CHAR(10)    NOT NULL
-,dateFrom   VARCHAR(10) NOT NULL
+,dateFrom   DATE        NOT NULL
 ,dateTo     VARCHAR(10) NOT NULL
 ,roomNo     CHAR(10)    NOT NULL
 ,CONSTRAINT PKBooking PRIMARY KEY (hotelNo, guestNo, dateFrom)
@@ -46,7 +62,7 @@ CREATE TABLE Booking
 ,CONSTRAINT FKGuestNo FOREIGN KEY (guestNo)
                       REFERENCES Guest (guestNo)
 );
---
+--  Q4. Inserting sample data into the Hotel table.
 INSERT INTO Hotel
   VALUES ('H0001', 'The Villegas Inn', 'Bermuda');
 INSERT INTO Hotel
@@ -55,7 +71,7 @@ INSERT INTO Hotel
   VALUES ('H0003', 'The Lam Motel', 'Bangkok');
 INSERT INTO Hotel
   VALUES ('H0004', 'The NesvaderaHu Joint Hotel', 'Surrey');
---
+--  Q4. Inserting sample data into the Room table.
 INSERT INTO Room
   VALUES ('001', 'H0001', 'Single', 50);
 INSERT INTO Room
@@ -64,7 +80,7 @@ INSERT INTO Room
   VALUES ('100', 'H0004', 'Family', 66);
 INSERT INTO Room
   VALUES ('075', 'H0002', 'Double', 20);
---
+--  Q4. Inserting sample data into the Guest table.
 INSERT INTO Guest
   VALUES ('G001', 'Wilson Hu', '123 Hampton Pl');
 INSERT INTO Guest
@@ -73,7 +89,7 @@ INSERT INTO Guest
   VALUES ('G003', 'Luli Lowenstein', '654 Columbia Road');
 INSERT INTO Guest
   VALUES ('G004', 'Yashar Nesvaderani', '666 Fail St');
---
+--  Q4. Inserting sample data into the Booking table.
 INSERT INTO Booking
   VALUES ('H0003', 'G002', '2016-08-08', '2016-09-08', '056');
 INSERT INTO Booking
@@ -82,39 +98,39 @@ INSERT INTO Booking
   VALUES ('H0002', 'G003', '2017-01-03', '2017-01-06', '075');
 INSERT INTO Booking
   VALUES ('H0004', 'G001', '2016-08-08', '2016-09-10', '100');
---
+--  Q5. Dropping the check constraint for Room table.
 ALTER TABLE Room
 DROP CONSTRAINT chk_type;
---
+--  Q5. Modifying the check constraint for Room so it accepts 'Deluxe'.
 ALTER TABLE Room
 ADD CONSTRAINT chk_Type
   CHECK (type IN ('Deluxe', 'Single', 'Double', 'Family'));
---
---
+--  Q5. Adding a new column called Discount. Default 0, and must be between 0 and 30.
 ALTER TABLE Room
   ADD discount  DECIMAL(5)  DEFAULT 0 NOT NULL;
 ALTER TABLE Room
-  ADD CONSTRAINT chk_Discount CHECK (discount >= 0 AND discount <= 30);
---
+  ADD CONSTRAINT chk_Discount CHECK (discount BETWEEN 0 AND 30);
+--  Q6. Increasing the price of 'Double' rooms in a hotel of our choice by 15%.
 UPDATE Room
 SET price = 23
 WHERE hotelNo = 'H0002' AND type = 'Double';
---
+--  Q6. Modifying the booking for a guest that arrived early.
 UPDATE Booking
 SET dateFrom = '2016-07-28', dateTo = '2016-10-05'
-WHERE guestNo = 'G001
---
+WHERE guestNo = 'G001'
+--  Q7. Creating archive table for Booking table.
 CREATE TABLE OldBooking
 (hotelNo    CHAR(10)    NOT NULL
 ,guestNo    CHAR(10)    NOT NULL
 ,dateFrom   VARCHAR(10) NOT NULL
 ,dateTo     VARCHAR(10) NOT NULL
 ,roomNo     CHAR(10)    NOT NULL
+,CONSTRAINT PKOldBooking PRIMARY KEY (guestNo)
 );
---
+--  Q7. Copying rows in Booking table with dates before 2017-01-01 to OldBooking table.
 INSERT INTO OldBooking
 SELECT * FROM Booking
 WHERE dateTo <= '2017-01-01';
---
+--  Q7. Deleting rows in Booking table that have dates before 2017-01-01.
 DELETE FROM Booking
 WHERE dateTo <= '2017-01-01';
