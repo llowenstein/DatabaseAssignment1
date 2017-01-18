@@ -11,7 +11,7 @@ SET ECHO ON
 -- ---------------------------------------------------------
 ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD';
 --
-SPOOL PATH-HERE/spool.txt
+SPOOL PATH-HERE/Asn1_LowensteinL_VillegasS.txt
 --
 --  Q1. Dropping all tables
 DROP TABLE Booking;
