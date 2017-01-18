@@ -98,6 +98,19 @@ INSERT INTO Booking
   VALUES ('H0002', 'G003', TO_DATE('2017-01-03'), TO_DATE('2017-01-06'), '075');
 INSERT INTO Booking
   VALUES ('H0004', 'G001', TO_DATE('2016-08-08'), TO_DATE('2016-09-10'), '100');
+--
+--  Displaying the tables and their durrent data.
+SELECT *
+    FROM Hotel;
+--
+SELECT *
+    FROM Room;
+--
+SELECT *
+    FROM Guest;
+--
+SELECT *
+    FROM Booking;
 --  Q5a. Dropping the check constraint for Room table.
 ALTER TABLE Room
 DROP CONSTRAINT chk_type;
@@ -131,10 +144,27 @@ CREATE TABLE OldBooking
 );
 --  Q7b. Copying rows in Booking table with dates before 2017-01-01 to OldBooking table.
 INSERT INTO OldBooking
-SELECT * FROM Booking
+SELECT * 
+FROM Booking
 WHERE dateTo < TO_DATE('2017-01-01');
 --  Q7c. Deleting rows in Booking table that have dates before 2017-01-01.
 DELETE FROM Booking
 WHERE dateTo <= TO_DATE('2017-01-01');
+--
+--  Display all tables after all changes are made
+SELECT *
+    FROM Hotel;
+--
+SELECT *
+    FROM Room;
+--
+SELECT *
+    FROM Guest;
+--
+SELECT *
+    FROM Booking;
+--
+SELECT *
+    FROM OldBooking;
 --
 SPOOL OFF;
