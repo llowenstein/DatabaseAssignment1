@@ -36,7 +36,7 @@ Table dropped.
 
 SQL> --  Q2. Creating Hotel table.
 SQL> CREATE TABLE Hotel
-  2  (hotelNo	   CHAR(10)    NOT NULL
+  2  (hotelNo	     CHAR(10)    NOT NULL
   3  ,hotelName    VARCHAR(30) NOT NULL
   4  ,city	       VARCHAR(15) NOT NULL
   5  ,CONSTRAINT PKHotel PRIMARY KEY (hotelNo)
@@ -48,8 +48,8 @@ SQL> --  Q2. Creating Room table.
 SQL> CREATE TABLE Room
   2  (roomNo	  CHAR(10)	     NOT NULL
   3  ,hotelNo	  CHAR(10)	     NOT NULL
-  4  ,type	      VARCHAR(15)	 NOT NULL
-  5  ,price	      DECIMAL(10)	 NOT NULL
+  4  ,type	    VARCHAR(15)	   NOT NULL
+  5  ,price	    DECIMAL(10)	   NOT NULL
   6  ,CONSTRAINT chk_Type
   7  		   CHECK (type IN ('Single', 'Double', 'Family'))
   8  ,CONSTRAINT chk_Price
@@ -65,7 +65,7 @@ Table created.
 
 SQL> --  Q3. Creating Guest table.
 SQL> CREATE TABLE Guest
-  2  (guestNo	   CHAR(10)    NOT NULL
+  2  (guestNo	     CHAR(10)    NOT NULL
   3  ,guestName    VARCHAR(30) NOT NULL
   4  ,guestAddress VARCHAR(30) NOT NULL
   5  ,CONSTRAINT PKGuest PRIMARY KEY (guestNo)
@@ -75,11 +75,11 @@ Table created.
 
 SQL> --  Q3. Creating Booking table.
 SQL> CREATE TABLE Booking
-  2  (hotelNo	 CHAR(10)    NOT NULL
-  3  ,guestNo	 CHAR(10)    NOT NULL
-  4  ,dateFrom	 DATE	     NOT NULL
-  5  ,dateTo	 VARCHAR(10) NOT NULL
-  6  ,roomNo	 CHAR(10)    NOT NULL
+  2  (hotelNo	   CHAR(10)    NOT NULL
+  3  ,guestNo	   CHAR(10)    NOT NULL
+  4  ,dateFrom	 DATE	       NOT NULL
+  5  ,dateTo	   VARCHAR(10) NOT NULL
+  6  ,roomNo	   CHAR(10)    NOT NULL
   7  ,CONSTRAINT PKBooking PRIMARY KEY (hotelNo, guestNo, dateFrom)
   8  ,CONSTRAINT FKBHotelNo FOREIGN KEY (hotelNo, roomNo)
   9  		   REFERENCES Room (hotelNo, roomNo)
@@ -174,49 +174,49 @@ SQL> INSERT INTO Booking
 1 row created.
 
 SQL> --
-SQL> --  Displaying the tables and their durrent data.
+SQL> --  Displaying the tables and their current data.
 SQL> SELECT *
   2  	 FROM Hotel;
 
-HOTELNO    HOTELNAME                      CITY                                  
----------- ------------------------------ ---------------                       
-H0001      The Villegas Inn               Bermuda                               
-H0002      The Lowenstein Inn             Caracas                               
-H0003      The Lam Motel                  Bangkok                               
-H0004      The NesvaderaHu Joint Hotel    Surrey                                
+HOTELNO    HOTELNAME                      CITY
+---------- ------------------------------ ---------------
+H0001      The Villegas Inn               Bermuda
+H0002      The Lowenstein Inn             Caracas
+H0003      The Lam Motel                  Bangkok
+H0004      The NesvaderaHu Joint Hotel    Surrey
 
 SQL> --
 SQL> SELECT *
   2  	 FROM Room;
 
-ROOMNO     HOTELNO    TYPE                 PRICE                                
----------- ---------- --------------- ----------                                
-001        H0001      Single                  50                                
-056        H0003      Double                  75                                
-100        H0004      Family                  66                                
-075        H0002      Double                  20                                
+ROOMNO     HOTELNO    TYPE                 PRICE
+---------- ---------- --------------- ----------
+001        H0001      Single                  50
+056        H0003      Double                  75
+100        H0004      Family                  66
+075        H0002      Double                  20
 
 SQL> --
 SQL> SELECT *
   2  	 FROM Guest;
 
-GUESTNO    GUESTNAME                      GUESTADDRESS                          
----------- ------------------------------ ------------------------------        
-G001       Wilson Hu                      123 Hampton Pl                        
-G002       Angus Lam                      9.75 Platform                         
-G003       Luli Lowenstein                654 Columbia Road                     
-G004       Yashar Nesvaderani             666 Fail St                           
+GUESTNO    GUESTNAME                      GUESTADDRESS
+---------- ------------------------------ ------------------------------
+G001       Wilson Hu                      123 Hampton Pl
+G002       Angus Lam                      9.75 Platform
+G003       Luli Lowenstein                654 Columbia Road
+G004       Yashar Nesvaderani             666 Fail St
 
 SQL> --
 SQL> SELECT *
   2  	 FROM Booking;
 
-HOTELNO    GUESTNO    DATEFROM   DATETO     ROOMNO                              
----------- ---------- ---------- ---------- ----------                          
-H0003      G002       2016-08-08 2016-09-08 056                                 
-H0001      G004       2016-10-05 2016-10-20 001                                 
-H0002      G003       2017-01-03 2017-01-06 075                                 
-H0004      G001       2016-08-08 2016-09-10 100                                 
+HOTELNO    GUESTNO    DATEFROM   DATETO     ROOMNO
+---------- ---------- ---------- ---------- ----------
+H0003      G002       2016-08-08 2016-09-08 056
+H0001      G004       2016-10-05 2016-10-20 001
+H0002      G003       2017-01-03 2017-01-06 075
+H0004      G001       2016-08-08 2016-09-10 100
 
 SQL> --  Q5a. Dropping the check constraint for Room table.
 SQL> ALTER TABLE Room
@@ -289,52 +289,52 @@ SQL> --  Display all tables after all changes are made
 SQL> SELECT *
   2  	 FROM Hotel;
 
-HOTELNO    HOTELNAME                      CITY                                  
----------- ------------------------------ ---------------                       
-H0001      The Villegas Inn               Bermuda                               
-H0002      The Lowenstein Inn             Caracas                               
-H0003      The Lam Motel                  Bangkok                               
-H0004      The NesvaderaHu Joint Hotel    Surrey                                
+HOTELNO    HOTELNAME                      CITY
+---------- ------------------------------ ---------------
+H0001      The Villegas Inn               Bermuda
+H0002      The Lowenstein Inn             Caracas
+H0003      The Lam Motel                  Bangkok
+H0004      The NesvaderaHu Joint Hotel    Surrey
 
 SQL> --
 SQL> SELECT *
   2  	 FROM Room;
 
-ROOMNO     HOTELNO    TYPE                 PRICE   DISCOUNT                     
----------- ---------- --------------- ---------- ----------                     
-001        H0001      Single                  50          0                     
-056        H0003      Double                  75          0                     
-100        H0004      Family                  66          0                     
-075        H0002      Double                  23          0                     
+ROOMNO     HOTELNO    TYPE                 PRICE   DISCOUNT
+---------- ---------- --------------- ---------- ----------
+001        H0001      Single                  50          0
+056        H0003      Double                  75          0
+100        H0004      Family                  66          0
+075        H0002      Double                  23          0
 
 SQL> --
 SQL> SELECT *
   2  	 FROM Guest;
 
-GUESTNO    GUESTNAME                      GUESTADDRESS                          
----------- ------------------------------ ------------------------------        
-G001       Wilson Hu                      123 Hampton Pl                        
-G002       Angus Lam                      9.75 Platform                         
-G003       Luli Lowenstein                654 Columbia Road                     
-G004       Yashar Nesvaderani             666 Fail St                           
+GUESTNO    GUESTNAME                      GUESTADDRESS
+---------- ------------------------------ ------------------------------
+G001       Wilson Hu                      123 Hampton Pl
+G002       Angus Lam                      9.75 Platform
+G003       Luli Lowenstein                654 Columbia Road
+G004       Yashar Nesvaderani             666 Fail St
 
 SQL> --
 SQL> SELECT *
   2  	 FROM Booking;
 
-HOTELNO    GUESTNO    DATEFROM   DATETO     ROOMNO                              
----------- ---------- ---------- ---------- ----------                          
-H0002      G003       2017-01-03 2017-01-06 075                                 
+HOTELNO    GUESTNO    DATEFROM   DATETO     ROOMNO
+---------- ---------- ---------- ---------- ----------
+H0002      G003       2017-01-03 2017-01-06 075
 
 SQL> --
 SQL> SELECT *
   2  	 FROM OldBooking;
 
-HOTELNO    GUESTNO    DATEFROM   DATETO     ROOMNO                              
----------- ---------- ---------- ---------- ----------                          
-H0003      G002       2016-08-08 2016-09-08 056                                 
-H0001      G004       2016-10-05 2016-10-20 001                                 
-H0004      G001       2016-07-28 2016-10-05 100                                 
+HOTELNO    GUESTNO    DATEFROM   DATETO     ROOMNO
+---------- ---------- ---------- ---------- ----------
+H0003      G002       2016-08-08 2016-09-08 056
+H0001      G004       2016-10-05 2016-10-20 001
+H0004      G001       2016-07-28 2016-10-05 100
 
 SQL> --
 SQL> SPOOL OFF;
