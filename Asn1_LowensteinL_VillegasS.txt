@@ -36,9 +36,9 @@ Table dropped.
 
 SQL> --  Q2. Creating Hotel table.
 SQL> CREATE TABLE Hotel
-  2  (hotelNo	     CHAR(10)    NOT NULL
+  2  (hotelNo      CHAR(10)    NOT NULL
   3  ,hotelName    VARCHAR(30) NOT NULL
-  4  ,city	       VARCHAR(15) NOT NULL
+  4  ,city         VARCHAR(15) NOT NULL
   5  ,CONSTRAINT PKHotel PRIMARY KEY (hotelNo)
   6  );
 
@@ -46,10 +46,10 @@ Table created.
 
 SQL> --  Q2. Creating Room table.
 SQL> CREATE TABLE Room
-  2  (roomNo	  CHAR(10)	     NOT NULL
-  3  ,hotelNo	  CHAR(10)	     NOT NULL
-  4  ,type	    VARCHAR(15)	   NOT NULL
-  5  ,price	    DECIMAL(10)	   NOT NULL
+  2  (roomNo      CHAR(10)         NOT NULL
+  3  ,hotelNo     CHAR(10)         NOT NULL
+  4  ,type        VARCHAR(15)      NOT NULL
+  5  ,price       DECIMAL(10)      NOT NULL
   6  ,CONSTRAINT chk_Type
   7  		   CHECK (type IN ('Single', 'Double', 'Family'))
   8  ,CONSTRAINT chk_Price
@@ -65,9 +65,9 @@ Table created.
 
 SQL> --  Q3. Creating Guest table.
 SQL> CREATE TABLE Guest
-  2  (guestNo	     CHAR(10)    NOT NULL
-  3  ,guestName    VARCHAR(30) NOT NULL
-  4  ,guestAddress VARCHAR(30) NOT NULL
+  2  (guestNo        CHAR(10)    NOT NULL
+  3  ,guestName      VARCHAR(30) NOT NULL
+  4  ,guestAddress   VARCHAR(30) NOT NULL
   5  ,CONSTRAINT PKGuest PRIMARY KEY (guestNo)
   6  );
 
@@ -77,7 +77,7 @@ SQL> --  Q3. Creating Booking table.
 SQL> CREATE TABLE Booking
   2  (hotelNo	   CHAR(10)    NOT NULL
   3  ,guestNo	   CHAR(10)    NOT NULL
-  4  ,dateFrom	 DATE	       NOT NULL
+  4  ,dateFrom     DATE	       NOT NULL
   5  ,dateTo	   VARCHAR(10) NOT NULL
   6  ,roomNo	   CHAR(10)    NOT NULL
   7  ,CONSTRAINT PKBooking PRIMARY KEY (hotelNo, guestNo, dateFrom)
